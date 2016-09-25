@@ -56,7 +56,7 @@ public class MyModel extends Observable implements Model {
 		loadSolutions();
 	}	
 	
-//	class GenerateMazeRunnable implements Runnable {
+///	class GenerateMazeRunnable implements Runnable {
 //
 //		private int floors, rows, cols;
 //		private String name;
