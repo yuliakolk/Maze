@@ -156,6 +156,12 @@ public class MyView extends Observable implements View, Observer {
 			notifyObservers(arg);
 		}
 	}
+
+	@Override
+	public void displaySaveMessage(String msg) {
+		// TODO Auto-generated method stub
+		
+	}
 }
 
 		

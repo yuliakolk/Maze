@@ -1,4 +1,6 @@
 package view;
+import javax.swing.JOptionPane;
+
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
@@ -15,6 +17,10 @@ import org.eclipse.swt.widgets.Text;
 
 public class SolveWindow extends DialogWindow {
 	
+	private boolean bfs;
+	private boolean dfs;
+	
+	
 	@Override
 	protected void initWidgets() {
 		shell.setText("Solve window");
@@ -22,7 +28,6 @@ public class SolveWindow extends DialogWindow {
 				
 		shell.setLayout(new GridLayout(2, false));	
 				
-		
 		Button[] radios = new Button[2];
 
 		radios[0]= new Button(shell, SWT.RADIO); 
@@ -38,22 +43,37 @@ public class SolveWindow extends DialogWindow {
 		shell.setDefaultButton(btnSolveMaze);
 		btnSolveMaze.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false, 2, 1));
 		btnSolveMaze.setText("solve");
-	
-			
-			
 		
+		btnSolveMaze.addSelectionListener(new SelectionListener() {
+			
+			@Override
+			public void widgetSelected(SelectionEvent arg0) {				
+				
+				bfs = radios[0].getSelection();
+				dfs =  radios[1].getSelection();
+
+				if (bfs){
+					notifyObservers("solve " + name + " bfs");
+				}
+				if (dfs){
+					notifyObservers("solve " + name + " dfs");
+				}
+				
+				shell.close();
+			}
+			@Override
+			public void widgetDefaultSelected(SelectionEvent e) {
+				
+	
+			}
+		});
 	}
+	
+
 
 	@Override
 	public void run() {
 		// TODO Auto-generated method stub
 		
 	}
-
-//	@Override
-//	public void run() {
-//		// TODO Auto-generated method stub
-//		
-//	}
-
-}
+		}

@@ -1,3 +1,4 @@
+
 package view;
 
 import java.util.HashMap;
@@ -23,4 +24,5 @@ public interface View {
 	void start();
 	void printCrossSectionBy(int[][] arr, int a, int b);
 	void displayMessage(String msg);
+	void displaySaveMessage(String msg);
 }

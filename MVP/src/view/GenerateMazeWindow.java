@@ -9,13 +9,13 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Spinner;
+import org.eclipse.swt.widgets.Text;
 
 import algorithms.mazeGenerators.Maze3d;
 import algorithms.search.Solution;
 
 public class GenerateMazeWindow extends DialogWindow {
 	
-	//private MazeDisplay mazeDisplay;
 	public int rows;
 	public int cols;
 	public int floors;
@@ -26,7 +26,12 @@ public class GenerateMazeWindow extends DialogWindow {
 		shell.setSize(300, 200);		
 				
 		shell.setLayout(new GridLayout(2, false));	
-				
+		
+		Label lblName = new Label(shell, SWT.NONE);
+		lblName.setText("Maze's name: ");
+		
+		Text txtName = new Text(shell, SWT.NONE);
+		
 		Label lblRows = new Label(shell, SWT.NONE);
 		lblRows.setText("Rows: ");
 		
@@ -61,25 +66,18 @@ public class GenerateMazeWindow extends DialogWindow {
 			@Override
 			public void widgetSelected(SelectionEvent arg0) {				
 				MessageBox msg = new MessageBox(shell, SWT.OK);
-				msg.setText("Title");
-				//msg.setMessage("Button was clicked");
+				msg.setText("Generate maze");
+				name = txtName.getText();
 				rows = Integer.parseInt(spiRows.getText());
 				cols = Integer.parseInt(spiCols.getText());
 				floors = Integer.parseInt(spiFloors.getText());
-				
-				notifyObservers("generate_3d_maze chen " + cols + " " + rows + " " + floors );
-				msg.setMessage("Generating maze with cols: " + cols +" rows: " +rows +" floors: "+ floors);
-				
-				msg.open();
-				
+
 				if ((cols != 1) && (rows != 1) && (floors != 1)){
-					//Maze3d maze = new Maze3d(cols, rows, floors);
-					
+					notifyObservers("generate_3d_maze "+ name+ " " + cols + " " + rows + " " + floors );
+					msg.setMessage("Generating maze "+ name + " with cols: " + cols +" rows: " +rows +" floors: "+ floors);
+					msg.open();
 					setChanged();
-					
-					//notifyObservers("generate_3d_maze");
-					//maze.play = true;
-					//maze.setStartPosition(maze.getStartPosition());
+
 				}
 				else{
 					JOptionPane.showMessageDialog(null,
@@ -102,6 +100,10 @@ public class GenerateMazeWindow extends DialogWindow {
 	public void run() {
 		// TODO Auto-generated method stub
 		
+	}
+
+	public static String getName(){
+		return name;
 	}
 
 }

@@ -22,6 +22,7 @@ import algorithms.mazeGenerators.GrowingTreeGenerator;
 import algorithms.mazeGenerators.Maze3d;
 import algorithms.mazeGenerators.Position;
 import algorithms.mazeGenerators.RandomCellSelector;
+import algorithms.mazeGenerators.SimpleMaze3dGenerator;
 import algorithms.search.BFS;
 import algorithms.search.DFS;
 import algorithms.search.Searcher;
@@ -56,7 +57,7 @@ public class MyModel extends Observable implements Model {
 		loadSolutions();
 	}	
 	
-///	class GenerateMazeRunnable implements Runnable {
+//	class GenerateMazeRunnable implements Runnable {
 //
 //		private int floors, rows, cols;
 //		private String name;
@@ -116,8 +117,12 @@ public class MyModel extends Observable implements Model {
 				Maze3d maze = generator.generate(cols,rows, floors);
 				mazes.put(name, maze);
 				
+//				SimpleMaze3dGenerator generator = new SimpleMaze3dGenerator();
+//				Maze3d maze = generator.generate(cols,rows, floors);
+//				mazes.put(name, maze);
+				
 				setChanged();
-				notifyObservers("maze_ready " + name);		
+				notifyObservers("display " + name);		
 				return maze;
 			}
 			
@@ -188,7 +193,7 @@ public class MyModel extends Observable implements Model {
 		solutions.put(name, sol);
 		
 		setChanged();
-		notifyObservers("solution_ready " + name);
+		notifyObservers("display_solution " + name);
 	}
 
 	/**
@@ -203,6 +208,8 @@ public class MyModel extends Observable implements Model {
 		out.write(maze.toByteArray());
 		out.flush();
 		out.close();
+		setChanged();
+		notifyObservers("save_ready "+name);
 }
 	
 	/**

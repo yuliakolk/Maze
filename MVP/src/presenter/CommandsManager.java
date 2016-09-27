@@ -43,6 +43,7 @@ public class CommandsManager {
 		commands.put("display_cross_section", new DisplayCrossSectionCommand());
 		commands.put("cross_section_ready", new CrossSectionReadyCommand());
 		commands.put("save_maze", new saveMazeCommand());
+		commands.put("save_ready", new SaveReadyCommand());
 		commands.put("load_maze", new loadMazeCommand());
 		commands.put("solve", new solveCommand());
 		commands.put("solution_ready", new SolutionReadyCommand());
@@ -99,8 +100,7 @@ public class CommandsManager {
 		@Override
 		public void doCommand(String[] args) {
 			String name = args[0];
-			//String msg = "maze " + name + " is ready";
-		view.displayMessage(name);
+		    view.notifyMazeIsReady(name);
 		}
 		
 	}
@@ -151,6 +151,17 @@ public class CommandsManager {
 			}
 		
 	}
+	}
+	
+	class SaveReadyCommand implements Command {
+
+		@Override
+		public void doCommand(String[] args) {
+			String name = args[0];
+			//String msg = "maze " + name + " is ready";
+		view.displaySaveMessage(name);
+		}
+		
 	}
 	
 	/**
