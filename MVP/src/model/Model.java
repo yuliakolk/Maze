@@ -1,9 +1,7 @@
 package model;
 
 import algorithms.mazeGenerators.Maze3d;
-import algorithms.mazeGenerators.Position;
 import algorithms.search.Solution;
-import presenter.Presenter;
 
 /**
 * @author  Chen Hamdani and Yulia Kolk
@@ -22,5 +20,7 @@ public interface Model {
 	void solve(String name, String algo);
 	void exit();
 	void getCrossSectionBy(String name, String t, int num);
+	void getMazes();
+	void openXML(String file);
 	
 }

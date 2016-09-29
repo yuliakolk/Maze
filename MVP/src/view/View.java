@@ -1,11 +1,7 @@
-
 package view;
-
-import java.util.HashMap;
 
 import algorithms.mazeGenerators.Maze3d;
 import algorithms.search.Solution;
-import presenter.Command;
 
 /**
 * @author Chen Hamdani & Yulia Kolk 
@@ -25,4 +21,6 @@ public interface View {
 	void printCrossSectionBy(int[][] arr, int a, int b);
 	void displayMessage(String msg);
 	void displaySaveMessage(String msg);
+	void MazesReady(String mazes);
+	void displayHint(Solution sol);
 }

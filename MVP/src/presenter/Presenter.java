@@ -3,9 +3,7 @@ package presenter;
 import java.util.HashMap;
 import java.util.Observable;
 import java.util.Observer;
-
 import model.Model;
-import algorithms.mazeGenerators.Maze3d;
 import view.View;
 
 /**

@@ -1,26 +1,16 @@
 package boot;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
-
-import model.Model;
 import model.MyModel;
 import presenter.Presenter;
 import view.MazeWindow;
-import view.MyView;
 
 public class Run {
 
 	public static void main(String[] args) {
 	
+		MyModel m = new MyModel();
 		MazeWindow win = new MazeWindow();
-		MyModel m = new MyModel(); 
 		Presenter p = new Presenter(m, win);
-		
-//		WelcomeWindom win = new WelcomeWindom();
-//		MyModel m = new MyModel(); 
-//		Presenter p = new Presenter(m, win);
 		
 		win.addObserver(p);
 		m.addObserver(p);

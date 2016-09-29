@@ -1,9 +1,16 @@
 package view;
-import java.util.Observable;
 
+import java.util.Observable;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 
+/**
+* @author Chen Hamdani & Yulia Kolk 
+* @version 1.0
+* @since   29/09/2016 
+ *  
+ *<h1>BaseWindow</h1>
+ */
 public abstract class BaseWindow extends Observable implements Runnable{
 	protected Display display;
 	protected Shell shell;	

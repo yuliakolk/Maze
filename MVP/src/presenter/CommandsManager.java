@@ -1,12 +1,10 @@
 package presenter;
 
-
 import java.util.HashMap;
 import model.Model;
 import model.MyModel;
 import algorithms.mazeGenerators.Maze3d;
 import algorithms.search.Solution;
-import view.MyView;
 import view.View;
 
 /**
@@ -46,11 +44,15 @@ public class CommandsManager {
 		commands.put("save_ready", new SaveReadyCommand());
 		commands.put("load_maze", new loadMazeCommand());
 		commands.put("solve", new solveCommand());
+		commands.put("getMazes", new getMazesCommand());
+		commands.put("mazes_ready", new MazesReadyCommand());
 		commands.put("solution_ready", new SolutionReadyCommand());
 		commands.put("display_solution", new displaySolutionCommand());
+		commands.put("hint", new HintCommand());
+		commands.put("display_hint", new displayHintCommand());
+		commands.put("open_xml", new OpenXML());
 		commands.put("exit", new ExitCommand());
-		
-		
+			
 		return commands;
 	}
 	
@@ -183,6 +185,7 @@ public class CommandsManager {
 		
 	}
 	
+	
 	/**	 
 	 * solves the maze by the received args - contains the name of the maze
 	 * receives an algorthm from the user the solve the maze by (DFS or BFS)
@@ -196,6 +199,32 @@ public class CommandsManager {
 			model.solve(name,algo);
 		}
 		
+	}
+	
+	public class HintCommand implements Command {
+
+		@Override
+		public void doCommand(String[] args) {
+			String name = args[0];
+			
+			model.solve(name,"hint");
+		}
+		
+	}
+	
+	public class displayHintCommand implements Command {
+
+		@Override
+		public void doCommand(String[] args) {
+			String name = args[0];
+			Solution sol = model.displaySolution(name);
+			if (sol!=null){
+			view.displayHint(sol);
+			}
+			else{
+				view.displayMessage("There are no solution for maze "+name);
+			}
+		}
 	}
 	
 	/**
@@ -226,6 +255,35 @@ public class CommandsManager {
 			String name = args[0];
 			String msg = "solution of maze " + name + " is ready";
 		view.displayMessage(msg);
+		}
+	}
+	
+	public class OpenXML implements Command {
+
+		@Override
+		public void doCommand(String[] args) {
+			// TODO check input
+			model.openXML(args[0]);
+		}
+	}
+	
+	public class getMazesCommand implements Command {
+
+		@Override
+		public void doCommand(String[] args) {
+			//String mazes = args[0];
+		//view.displayMessage(msg);
+			model.getMazes();
+		}
+	}
+	
+	public class MazesReadyCommand implements Command {
+
+		@Override
+		public void doCommand(String[] args) {
+			String mazes = args[0];
+
+			view.MazesReady(mazes);
 		}
 	}
 	

@@ -1,8 +1,10 @@
 package view;
+
 import javax.swing.JOptionPane;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
+import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
@@ -11,9 +13,14 @@ import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Spinner;
 import org.eclipse.swt.widgets.Text;
 
-import algorithms.mazeGenerators.Maze3d;
-import algorithms.search.Solution;
 
+/**
+* @author Chen Hamdani & Yulia Kolk 
+* @version 1.0
+* @since   29/09/2016 
+ * 
+ *<h1>GenerateMazeWindow</h1>
+ */
 public class GenerateMazeWindow extends DialogWindow {
 	
 	public int rows;
@@ -25,14 +32,25 @@ public class GenerateMazeWindow extends DialogWindow {
 		shell.setText("Generate maze window");
 		shell.setSize(300, 200);		
 				
+		Image img = new Image(null, getClass().getClassLoader().getResourceAsStream("images/back1.jpg"));
+//		Image img = new Image(null, "images/back1.jpg");
+		shell.setBackgroundImage(img);	
+		
 		shell.setLayout(new GridLayout(2, false));	
 		
 		Label lblName = new Label(shell, SWT.NONE);
+		lblName.setBackgroundImage(img);
 		lblName.setText("Maze's name: ");
 		
 		Text txtName = new Text(shell, SWT.NONE);
 		
+		Label lblSpace1 = new Label(shell, SWT.NONE);
+		lblSpace1.setBackgroundImage(img);
+		Label lblSpace2 = new Label(shell, SWT.NONE);
+		lblSpace2.setBackgroundImage(img);
+		
 		Label lblRows = new Label(shell, SWT.NONE);
+		lblRows.setBackgroundImage(img);
 		lblRows.setText("Rows: ");
 		
 		//Text txtRows = new Text(shell, SWT.BORDER);
@@ -41,6 +59,7 @@ public class GenerateMazeWindow extends DialogWindow {
 		spiRows.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
 		
 		Label lblCols = new Label(shell, SWT.NONE);
+		lblCols.setBackgroundImage(img);
 		lblCols.setText("Cols: ");
 		
 		//Text txtCols = new Text(shell, SWT.BORDER);
@@ -49,6 +68,7 @@ public class GenerateMazeWindow extends DialogWindow {
 		spiCols.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
 		
 		Label lblFloors = new Label(shell, SWT.NONE);
+		lblFloors.setBackgroundImage(img);
 		lblFloors.setText("Floors: ");
 		
 		//Text txtFloors = new Text(shell, SWT.BORDER);

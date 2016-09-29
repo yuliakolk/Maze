@@ -162,6 +162,18 @@ public class MyView extends Observable implements View, Observer {
 		// TODO Auto-generated method stub
 		
 	}
+
+	@Override
+	public void MazesReady(String mazes) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void displayHint(Solution sol) {
+		// TODO Auto-generated method stub
+		
+	}
 }
 
 		

@@ -1,5 +1,6 @@
 package model;
 
+import java.beans.XMLDecoder;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -9,6 +10,8 @@ import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.OutputStream;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.Observable;
 import java.util.concurrent.Callable;
@@ -21,8 +24,6 @@ import algorithms.demo.SearchableMaze3d;
 import algorithms.mazeGenerators.GrowingTreeGenerator;
 import algorithms.mazeGenerators.Maze3d;
 import algorithms.mazeGenerators.Position;
-import algorithms.mazeGenerators.RandomCellSelector;
-import algorithms.mazeGenerators.SimpleMaze3dGenerator;
 import algorithms.search.BFS;
 import algorithms.search.DFS;
 import algorithms.search.Searcher;
@@ -44,17 +45,22 @@ import properties.PropertiesLoader;
 public class MyModel extends Observable implements Model {
 	
 	private ExecutorService executor;
-	
+	private String generateAlg;
+	private String solveAlg;
 	private Properties properties;
 	private Map<String, Maze3d> mazes = new ConcurrentHashMap<String,Maze3d>();
 	private Map<String, Solution<Position>> solutions = new ConcurrentHashMap<String, Solution<Position>>();
-//	private List<Thread> threads = new ArrayList<Thread>();
+	private List<Thread> threads = new ArrayList<Thread>();
 
 	public MyModel() {
-		//properties = PropertiesLoader.getInstance().getProperties();
-		//executor = Executors.newFixedThreadPool(properties.getNumOfThreads());
-		executor = Executors.newFixedThreadPool(50);
+		String generateAlg = PropertiesLoader.getInstance().getProperties().getGenerateMazeAlgorithm();
+		String solveAlg = PropertiesLoader.getInstance().getProperties().getSolveMazeAlgorithm();
+		properties = PropertiesLoader.getInstance().getProperties();
+		executor = Executors.newFixedThreadPool(properties.getNumOfThreads());
+		//executor = Executors.newFixedThreadPool(50);
+		loadMazes();
 		loadSolutions();
+		
 	}	
 	
 //	class GenerateMazeRunnable implements Runnable {
@@ -81,6 +87,7 @@ public class MyModel extends Observable implements Model {
 //			generator.setDone(true);
 //		}		
 //	}
+	
 
 	//Parameters of the crossSection
 		private int [][] arr;
@@ -173,27 +180,40 @@ public class MyModel extends Observable implements Model {
 	 */
 	public void solve(String name, String algo){
 		
-		Solution sol=new Solution();
+		Solution sol= new Solution();
 		
-		if ((algo.equals("BFS"))||(algo.equals("bfs"))||(algo.equals("Bfs")))
+		if (algo.equals("hint")) 
 		{
-			//creating a searcher with BFS searcher
-			Searcher tester=new BFS();
-			//saving the solution with the BFS algorithm on local var "sol"
+			//creating a searcher with DFS searcher
+			Searcher tester=new DFS();
+			//saving the solution with the DFS algorithm on local var "sol"
 			sol=tester.search(new SearchableMaze3d(mazes.get(name)));
+			solutions.put(name, sol);
+			setChanged();
+			notifyObservers("display_hint " + name);
 		}
 		else
-			if (algo.equals("dfs")||algo.equals("DFS")||algo.equals("Dfs")) 
-				{
+		{
+			if ((algo.equals("BFS"))||(algo.equals("bfs"))||(algo.equals("Bfs")))
+			{
+				//creating a searcher with BFS searcher
+				Searcher tester=new BFS();
+				//saving the solution with the BFS algorithm on local var "sol"
+				sol=tester.search(new SearchableMaze3d(mazes.get(name)));
+			}
+			else if (algo.equals("dfs")||algo.equals("DFS")||algo.equals("Dfs")) 
+			{
 				//creating a searcher with DFS searcher
 				Searcher tester=new DFS();
 				//saving the solution with the DFS algorithm on local var "sol"
 				sol=tester.search(new SearchableMaze3d(mazes.get(name)));
-				}
-		solutions.put(name, sol);
-		
-		setChanged();
-		notifyObservers("display_solution " + name);
+			}
+			
+			solutions.put(name, sol);
+			
+			setChanged();
+			notifyObservers("display_solution " + name);
+		} 
 	}
 
 	/**
@@ -219,14 +239,56 @@ public class MyModel extends Observable implements Model {
 	 * @throws IOException
 	 */ 
 	public void loadMaze(String name, String fileName) throws IOException{
-		InputStream in=new MyDecompressorInputStream(new FileInputStream(fileName));
+		FileInputStream file = new FileInputStream(fileName);
+		InputStream in=new MyDecompressorInputStream(file);
 		int size = in.read();
 		byte b[]=new byte[size];
+
 		in.read(b);
 		in.close();
 		Maze3d loaded=new Maze3d(b);
 		mazes.put(name, loaded);
+		setChanged();
+		notifyObservers("display "+name);
 }
+	
+	@SuppressWarnings("unchecked")
+	private void loadMazes() {
+		
+		File file = new File("mazes.dat");
+		if (!file.exists())
+			return;
+		
+		ObjectInputStream oisMaze = null;
+		Map<String, Maze3d> tmpMazes = new ConcurrentHashMap<String,Maze3d>();
+
+		try {
+			FileInputStream fisMaze = new FileInputStream("mazes.dat");
+			//fisMaze.flush();
+			oisMaze = new ObjectInputStream(new GZIPInputStream(fisMaze));
+//			while(true){
+//				if(oisMaze.read()==-1) break;
+//				tmpMazes = (Map<String, Maze3d>)oisMaze.readObject();
+//			}
+			
+			tmpMazes = (Map<String, Maze3d>)oisMaze.readObject();
+			mazes = tmpMazes;
+			
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		} finally{
+			try {
+				oisMaze.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}		
+	}
+	
 	
 	@SuppressWarnings("unchecked")
 	private void loadSolutions() {
@@ -234,45 +296,74 @@ public class MyModel extends Observable implements Model {
 		if (!file.exists())
 			return;
 		
-		ObjectInputStream ois = null;
-		
+		ObjectInputStream oisSol = null;
+		Map<String, Solution<Position>> tmpSolutions = new ConcurrentHashMap<String, Solution<Position>>();
+				
 		try {
-			ois = new ObjectInputStream(new GZIPInputStream(new FileInputStream("solutions.dat")));
-			mazes = (Map<String, Maze3d>)ois.readObject();
-			solutions = (Map<String, Solution<Position>>)ois.readObject();		
+			FileInputStream fisSol = new FileInputStream("solutions.dat");
+			//fisSol.close();
+			oisSol = new ObjectInputStream(new GZIPInputStream(fisSol));
+			
+//			while(true){
+//				if(oisSol.read()==-1) break;
+//				tmpSolutions = (Map<String, Solution<Position>>)oisSol.readObject();
+//			}
+			
+			tmpSolutions = (Map<String, Solution<Position>>)oisSol.readObject();
+			solutions = tmpSolutions;
+			
 		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} finally{
 			try {
-				ois.close();
+				oisSol.close();
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}		
 	}
-	
-	private void saveSolutions() {
-		ObjectOutputStream oos = null;
+	private void saveMazes() {
+		ObjectOutputStream oosMaze = null;
 		try {
-		    oos = new ObjectOutputStream(new GZIPOutputStream(new FileOutputStream("solutions.dat")));
-			oos.writeObject(mazes);
-			oos.writeObject(solutions);			
-			
+			FileOutputStream fosMaze = new FileOutputStream("mazes.dat");
+			oosMaze = new ObjectOutputStream(new GZIPOutputStream(fosMaze));
+			//oosSol.flush();
+			oosMaze.writeObject(mazes);	
+			System.out.println(mazes);
+						
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
 			e.printStackTrace();
 		} finally {
 			try {
-				oos.close();
+				oosMaze.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+	
+	private void saveSolutions() {
+		ObjectOutputStream oosSol = null;
+		try {
+			FileOutputStream fosSol = new FileOutputStream("solutions.dat");
+			oosSol = new ObjectOutputStream(new GZIPOutputStream(fosSol));
+			//oosSol.flush();
+			oosSol.writeObject(solutions);	
+			System.out.println(solutions);
+
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				oosSol.close();
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
@@ -283,10 +374,44 @@ public class MyModel extends Observable implements Model {
 	 * exits the application while closing all open files and threads
 	 */
 	public void exit() {
-		executor.shutdownNow();
 		saveSolutions();
+		saveMazes();
+		//saveSolAndMaze();
+		executor.shutdownNow();
+		
 		}
+
+	@Override
+	public void getMazes() {
+		String mazesNames = null ;
+		for ( Map.Entry<String, Maze3d> entry : mazes.entrySet()) {
+		    String key = entry.getKey();
+		    mazesNames = key + " ";
+		    }
+		notifyObservers("mazes_ready "+ mazesNames);
+		}
+	
+
+@Override
+public void openXML(String file) {
+	try {
+		File fileName = new File(file);
+		if (!fileName.exists())
+			return;
+		XMLDecoder decoder = new XMLDecoder(new FileInputStream(file));
+		Properties loadedProperties = (Properties)decoder.readObject();
+		decoder.close();
+		Properties globalProperties = PropertiesLoader.getInstance().getProperties();
+		globalProperties.setNumOfThreads(loadedProperties.getNumOfThreads());
+		globalProperties.setGenerateMazeAlgorithm(loadedProperties.getGenerateMazeAlgorithm());
+		this.generateAlg = loadedProperties.getGenerateMazeAlgorithm();
+		globalProperties.setSolveMazeAlgorithm(loadedProperties.getSolveMazeAlgorithm());
+		this.solveAlg = loadedProperties.getSolveMazeAlgorithm();
+	} catch (FileNotFoundException e) {
+		e.printStackTrace();
 	}
+}
+}
 
 	
 
