@@ -32,8 +32,7 @@ public class GenerateMazeWindow extends DialogWindow {
 		shell.setText("Generate maze window");
 		shell.setSize(300, 200);		
 				
-		Image img = new Image(null, getClass().getClassLoader().getResourceAsStream("images/back1.jpg"));
-//		Image img = new Image(null, "images/back1.jpg");
+		Image img = new Image(null, "images/back1.jpg");
 		shell.setBackgroundImage(img);	
 		
 		shell.setLayout(new GridLayout(2, false));	

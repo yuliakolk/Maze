@@ -27,8 +27,7 @@ public class SolveWindow extends DialogWindow {
 		shell.setText("Solve window");
 		shell.setSize(250, 100);		
 		
-		Image img = new Image(null, getClass().getClassLoader().getResourceAsStream("images/back1.jpg"));
-//		Image img = new Image(null, "images/back1.jpg");
+		Image img = new Image(null, "images/back1.jpg");
 		shell.setBackgroundImage(img);	
 		
 		shell.setLayout(new GridLayout(2, false));	

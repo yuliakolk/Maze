@@ -16,8 +16,7 @@ public class Character {
 	
 	
 	public Character() {
-		img = new Image(null, getClass().getClassLoader().getResourceAsStream("images/character.jpg"));
-		//img = new Image(null, "images/character.jpg");
+		img = new Image(null, "images/character.jpg");
 	}
 
 	public Position2D getPos() {
@@ -47,8 +46,7 @@ public class Character {
 	 * @param gc
 	 */
 	public void drawGoal(int cellWidth, int cellHeight, GC gc) {
-		   Image imgGoal = new Image(null, getClass().getClassLoader().getResourceAsStream("images/goal.jpg"));
-//		   Image imgGoal = new Image(null, "images/goal.jpg");
+		   Image imgGoal = new Image(null, "images/goal.jpg");
 		gc.drawImage(imgGoal, 0, 0, imgGoal.getBounds().width, imgGoal.getBounds().height, 
 				cellWidth * pos.x, cellHeight * pos.y, cellWidth, cellHeight);
 	}

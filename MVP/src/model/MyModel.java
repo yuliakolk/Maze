@@ -53,8 +53,8 @@ public class MyModel extends Observable implements Model {
 	private List<Thread> threads = new ArrayList<Thread>();
 
 	public MyModel() {
-		String generateAlg = PropertiesLoader.getInstance().getProperties().getGenerateMazeAlgorithm();
-		String solveAlg = PropertiesLoader.getInstance().getProperties().getSolveMazeAlgorithm();
+		PropertiesLoader.getInstance().getProperties().getGenerateMazeAlgorithm();
+		PropertiesLoader.getInstance().getProperties().getSolveMazeAlgorithm();
 		properties = PropertiesLoader.getInstance().getProperties();
 		executor = Executors.newFixedThreadPool(properties.getNumOfThreads());
 		//executor = Executors.newFixedThreadPool(50);

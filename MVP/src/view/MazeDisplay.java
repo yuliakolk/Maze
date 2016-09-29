@@ -98,17 +98,11 @@ public class MazeDisplay extends Canvas {
 				int h = height / mazeData.length;
 
 				Position2D pos;
-				Image imgUp = new Image(null, getClass().getClassLoader().getResourceAsStream("images/down.png"));
-				Image imgDown = new Image(null, getClass().getClassLoader().getResourceAsStream("images/up.png"));
-				Image imgUpAndDown = new Image(null, getClass().getClassLoader().getResourceAsStream("images/upAndDown.jpg"));
-				Image imgGoal = new Image(null, getClass().getClassLoader().getResourceAsStream("images/goalB.jpg"));
-				Image imgStone = new Image(null, getClass().getClassLoader().getResourceAsStream("images/stone.jpg"));
-				
-//				Image imgUp = new Image(null, "images/down.png");
-//				Image imgDown = new Image(null, "images/up.png");
-//				Image imgUpAndDown = new Image(null, "images/upAndDown.jpg");
-//				Image imgGoal = new Image(null, "images/goalB.jpg");
-//				Image imgStone = new Image(null, "images/stone.jpg");
+				Image imgUp = new Image(null, "images/down.png");
+				Image imgDown = new Image(null, "images/up.png");
+				Image imgUpAndDown = new Image(null, "images/upAndDown.jpg");
+				Image imgGoal = new Image(null, "images/goalB.jpg");
+				Image imgStone = new Image(null, "images/stone.jpg");
 
 				imgDown.setBackground(getBackground());
 
@@ -354,8 +348,7 @@ public class MazeDisplay extends Canvas {
 		shell.setText("Win");
 		shell.setSize(270, 240);
 
-		Image img = new Image(getDisplay(), getClass().getClassLoader().getResourceAsStream("images/winner.jpg"));
-//		Image img = new Image(getDisplay(), "images/winner.jpg");
+		Image img = new Image(getDisplay(), "images/winner.jpg");
 		shell.setBackgroundImage(img);
 
 		shell.open();

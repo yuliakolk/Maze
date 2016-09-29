@@ -65,8 +65,7 @@ public class MazeWindow extends BaseWindow implements View, Observer {
 		GridLayout grid = new GridLayout(2, false);
 		shell.setLayout(grid);
 
-		Image imgWin = new Image(null, getClass().getClassLoader().getResourceAsStream("images/backWin.jpg"));
-//		Image imgWin = new Image(null, "images/backWin.jpg");
+		Image imgWin = new Image(null, "images/backWin.jpg");
 		shell.setBackgroundImage(imgWin);
 
 		Composite buttons = new Composite(shell, SWT.NONE);
