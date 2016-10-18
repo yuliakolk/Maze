@@ -57,7 +57,7 @@ public class MazeDisplay extends Canvas {
 				int w = width / mazeData[0].length;
 				int h = height / mazeData.length;
 
-				Image imgStone = new Image(null, "images/stone.jpg");
+				Image imgStone = new Image(null, "images/back.jpg");
 
 				// System.out.println("number of mazeData cols :
 				// "+mazeData.length);
@@ -101,8 +101,8 @@ public class MazeDisplay extends Canvas {
 				Image imgUp = new Image(null, "images/down.png");
 				Image imgDown = new Image(null, "images/up.png");
 				Image imgUpAndDown = new Image(null, "images/upAndDown.jpg");
-				Image imgGoal = new Image(null, "images/goalB.jpg");
-				Image imgStone = new Image(null, "images/stone.jpg");
+				Image imgGoal = new Image(null, "images/goal.jpg");
+				Image imgStone = new Image(null, "images/back.jpg");
 
 				imgDown.setBackground(getBackground());
 
@@ -346,7 +346,7 @@ public class MazeDisplay extends Canvas {
 		System.out.println("winner!!!");
 		Shell shell = new Shell(getDisplay());
 		shell.setText("Win");
-		shell.setSize(270, 240);
+		shell.setSize(300, 220);
 
 		Image img = new Image(getDisplay(), "images/winner.jpg");
 		shell.setBackgroundImage(img);
