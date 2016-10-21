@@ -8,6 +8,8 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 
+import algorithms.mazeGenerators.Position;
+
 
 /**
 * @author Chen Hamdani & Yulia Kolk 
@@ -20,14 +22,15 @@ public class SolveWindow extends DialogWindow {
 	
 	private boolean bfs;
 	private boolean dfs;
-	
+	Position curPos;
 	
 	@Override
 	protected void initWidgets() {
 		shell.setText("Solve window");
 		shell.setSize(250, 100);		
 		
-		Image img = new Image(null, "images/back.jpg");
+//		Image img = new Image(null, getClass().getClassLoader().getResourceAsStream("images/back1.jpg"));
+		Image img = new Image(null, "images/back1.jpg");
 		shell.setBackgroundImage(img);	
 		
 		shell.setLayout(new GridLayout(2, false));	
@@ -58,11 +61,12 @@ public class SolveWindow extends DialogWindow {
 				bfs = radios[0].getSelection();
 				dfs =  radios[1].getSelection();
 
+				
 				if (bfs){
-					notifyObservers("solve " + name + " bfs");
+					notifyObservers("solve " + name + " bfs " +curPos );
 				}
 				if (dfs){
-					notifyObservers("solve " + name + " dfs");
+					notifyObservers("solve " + name + " dfs" +curPos);
 				}
 				
 				shell.close();

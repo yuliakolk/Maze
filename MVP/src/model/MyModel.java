@@ -53,8 +53,8 @@ public class MyModel extends Observable implements Model {
 	private List<Thread> threads = new ArrayList<Thread>();
 
 	public MyModel() {
-		PropertiesLoader.getInstance().getProperties().getGenerateMazeAlgorithm();
-		PropertiesLoader.getInstance().getProperties().getSolveMazeAlgorithm();
+		String generateAlg = PropertiesLoader.getInstance().getProperties().getGenerateMazeAlgorithm();
+		String solveAlg = PropertiesLoader.getInstance().getProperties().getSolveMazeAlgorithm();
 		properties = PropertiesLoader.getInstance().getProperties();
 		executor = Executors.newFixedThreadPool(properties.getNumOfThreads());
 		//executor = Executors.newFixedThreadPool(50);
@@ -178,16 +178,20 @@ public class MyModel extends Observable implements Model {
 	 * @param algo to use for solving the maze - BFS/DFS
 	 * solves the maze by the received name, solves it by the received algo (BFS or DFS)
 	 */
-	public void solve(String name, String algo){
+	
+	public void solve(String name, String algo, Position curPos){
 		
 		Solution sol= new Solution();
+		Maze3d maze= mazes.get(name);
+		maze.setStartPosition(curPos);
 		
 		if (algo.equals("hint")) 
 		{
 			//creating a searcher with DFS searcher
 			Searcher tester=new DFS();
 			//saving the solution with the DFS algorithm on local var "sol"
-			sol=tester.search(new SearchableMaze3d(mazes.get(name)));
+//			mazes.get(name).setStartPosition(curPos);
+			sol=tester.search(new SearchableMaze3d(maze));
 			solutions.put(name, sol);
 			setChanged();
 			notifyObservers("display_hint " + name);
@@ -199,14 +203,14 @@ public class MyModel extends Observable implements Model {
 				//creating a searcher with BFS searcher
 				Searcher tester=new BFS();
 				//saving the solution with the BFS algorithm on local var "sol"
-				sol=tester.search(new SearchableMaze3d(mazes.get(name)));
+				sol=tester.search(new SearchableMaze3d(maze));
 			}
 			else if (algo.equals("dfs")||algo.equals("DFS")||algo.equals("Dfs")) 
 			{
 				//creating a searcher with DFS searcher
 				Searcher tester=new DFS();
 				//saving the solution with the DFS algorithm on local var "sol"
-				sol=tester.search(new SearchableMaze3d(mazes.get(name)));
+				sol=tester.search(new SearchableMaze3d(maze));
 			}
 			
 			solutions.put(name, sol);

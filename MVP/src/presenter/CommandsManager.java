@@ -1,9 +1,11 @@
 package presenter;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import model.Model;
 import model.MyModel;
 import algorithms.mazeGenerators.Maze3d;
+import algorithms.mazeGenerators.Position;
 import algorithms.search.Solution;
 import view.View;
 
@@ -196,9 +198,17 @@ public class CommandsManager {
 		public void doCommand(String[] args) {
 			String name = args[0];
 			String algo= args[1];
-			model.solve(name,algo);
+			//Position curPos =Position.class.cast(args[2]);
+			Position curPos = toPos (args[2]);
+			
+			model.solve(name,algo,curPos);
 		}
-		
+		private Position toPos(String str) {
+			str=str.substring(1, str.length()-1);
+			String[] arr =str.split(",");
+			Position pos = new Position(Integer.parseInt(arr[0]), Integer.parseInt(arr[1]), Integer.parseInt(arr[2]));
+			return pos;
+		}
 	}
 	
 	public class HintCommand implements Command {
@@ -206,10 +216,18 @@ public class CommandsManager {
 		@Override
 		public void doCommand(String[] args) {
 			String name = args[0];
+			//Position curPos =(Position)args[1];
+			Position curPos = toPos (args[1]);
 			
-			model.solve(name,"hint");
+			model.solve(name,"hint",curPos);
 		}
-		
+
+		private Position toPos(String str) {
+			str=str.substring(1, str.length()-1);
+			String[] arr =str.split(",");
+			Position pos = new Position(Integer.parseInt(arr[0]), Integer.parseInt(arr[1]), Integer.parseInt(arr[2]));
+			return pos;
+		}
 	}
 	
 	public class displayHintCommand implements Command {

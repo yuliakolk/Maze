@@ -65,6 +65,7 @@ public class MazeWindow extends BaseWindow implements View, Observer {
 		GridLayout grid = new GridLayout(2, false);
 		shell.setLayout(grid);
 
+//		Image imgWin = new Image(null, getClass().getClassLoader().getResourceAsStream("images/backWin.jpg"));
 		Image imgWin = new Image(null, "images/backWin.jpg");
 		shell.setBackgroundImage(imgWin);
 
@@ -133,7 +134,8 @@ public class MazeWindow extends BaseWindow implements View, Observer {
 					Position2D pos = mazeDisplay.getCharacterPos();
 					Position curPos = new Position(pos.x, pos.y, currentFloor);
 					currentMaze.setStartPosition(curPos);
-					notifyObservers("hint " + mazeName);
+					notifyObservers("hint " + mazeName +" "+ curPos);
+					//notifyObservers("hint " + mazeName);
 				} else {
 					JOptionPane.showMessageDialog(null, "Iligal input" + " there are no maze to solved", "Error",
 							JOptionPane.WARNING_MESSAGE);
@@ -166,6 +168,7 @@ public class MazeWindow extends BaseWindow implements View, Observer {
 							currentFloor);
 					currentMaze.setStartPosition(currPos);
 					SolveWindow win = new SolveWindow();
+					win.curPos = currPos;
 					win.addObserver(MazeWindow.this);
 					win.start(display);
 				} else {

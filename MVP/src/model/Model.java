@@ -1,6 +1,7 @@
 package model;
 
 import algorithms.mazeGenerators.Maze3d;
+import algorithms.mazeGenerators.Position;
 import algorithms.search.Solution;
 
 /**
@@ -17,7 +18,7 @@ public interface Model {
 	void generateMaze (String name, int cols, int rows, int floors);
 	Maze3d displayMaze(String name);
 	Solution displaySolution(String name);
-	void solve(String name, String algo);
+	void solve(String name, String algo, Position curPos);
 	void exit();
 	void getCrossSectionBy(String name, String t, int num);
 	void getMazes();
